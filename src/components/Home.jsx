@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import CategoriesList from './CategoriesList';
 import ProductCard from './ProductCard';
@@ -65,13 +66,19 @@ export default class Home extends React.Component {
           <p>Nenhum produto foi encontrado</p>
         ) : (
           products.map(({ thumbnail, title, price, id }) => (
-            <ProductCard
-              title={ title }
-              thumbnail={ thumbnail }
-              price={ price }
-              product-id={ id }
+            <Link
               key={ id }
-            />
+              to={ `/productdetails/${id}` }
+              data-testid="product-detail-link"
+            >
+              <ProductCard
+                title={ title }
+                thumbnail={ thumbnail }
+                price={ price }
+                productId={ id }
+                key={ id }
+              />
+            </Link>
           ))
         )}
       </div>
