@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
-import Home from './components/Home';
-import ShoppingCart from './components/ShoppingCart';
-import CartDetails from './components/CartDetails';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Home from './pages/Home';
+import ShoppingCart from './pages/ShoppingCart';
+import CartDetails from './pages/CartDetails';
 // import './App.css';
 
 function App() {
@@ -16,7 +16,6 @@ function App() {
           render={ (props) => <CartDetails { ...props } /> }
         />
       </Switch>
-      <Link data-testid="shopping-cart-button" to="/shoppingcart">Carrinho</Link>
     </BrowserRouter>
   );
 }

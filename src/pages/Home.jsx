@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery } from '../services/api';
-import CategoriesList from './CategoriesList';
-import ProductCard from './ProductCard';
+import CategoriesList from '../components/CategoriesList';
+import ProductCard from '../components/ProductCard';
+import CartIcon from '../components/CartIcon';
 
 export default class Home extends React.Component {
   state = {
@@ -29,15 +30,28 @@ export default class Home extends React.Component {
 
   onCategoryChange = ({ target }) => {
     const { name, value } = target;
-    this.setState({
-      [name]: value,
-    }, this.searchProductByQuerry);
+    this.setState(
+      {
+        [name]: value,
+      },
+      this.searchProductByQuerry,
+    );
+  };
+
+  addToCart = (product) => {
+    const addedProducts = JSON.parse(localStorage.getItem('Produtos'));
+    console.log(addedProducts);
+    if (!addedProducts) {
+      return localStorage.setItem('Produtos', JSON.stringify([product]));
+    }
+    localStorage.setItem('Produtos', JSON.stringify([...addedProducts, product]));
   };
 
   render() {
     const { products, categorySelected } = this.state;
     return (
       <div>
+        <CartIcon />
         <div>
           <input
             name="querryInput"
@@ -65,20 +79,30 @@ export default class Home extends React.Component {
         {products === undefined ? (
           <p>Nenhum produto foi encontrado</p>
         ) : (
-          products.map(({ thumbnail, title, price, id }) => (
-            <Link
-              key={ id }
-              to={ `/productdetails/${id}` }
-              data-testid="product-detail-link"
-            >
-              <ProductCard
-                title={ title }
-                thumbnail={ thumbnail }
-                price={ price }
-                productId={ id }
-                key={ id }
-              />
-            </Link>
+          products.map((product) => (
+            <div key={ `div${product.id}` }>
+              <Link
+                key={ product.id }
+                to={ `/productdetails/${product.id}` }
+                data-testid="product-detail-link"
+              >
+                <ProductCard
+                  title={ product.title }
+                  thumbnail={ product.thumbnail }
+                  price={ product.price }
+                  productId={ product.id }
+                  key={ product.id }
+                />
+              </Link>
+              <button
+                key={ `button${product.id}` }
+                type="button"
+                data-testid="product-add-to-cart"
+                onClick={ () => this.addToCart(product) }
+              >
+                Adicionar ao Carrinho
+              </button>
+            </div>
           ))
         )}
       </div>
