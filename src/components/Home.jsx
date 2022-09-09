@@ -7,6 +7,13 @@ export default class Home extends React.Component {
   state = {
     querryInput: '',
     products: undefined,
+    inputSelect: '',
+  };
+
+  searchProductByQuerry = async () => {
+    const { querryInput, inputSelect } = this.state;
+    const response = await getProductsFromCategoryAndQuery(inputSelect, querryInput);
+    this.setState({ products: response.results });
   };
 
   onInputChange = ({ target }) => {
@@ -14,17 +21,11 @@ export default class Home extends React.Component {
     const value = type === 'checkbox' ? target.checked : target.value;
     this.setState({
       [name]: value,
-    });
-  };
-
-  searchProductByQuerry = async () => {
-    const { querryInput } = this.state;
-    const response = await getProductsFromCategoryAndQuery('', querryInput);
-    this.setState({ products: response.results });
+    }, this.searchProductByQuerry);
   };
 
   render() {
-    const { products } = this.state;
+    const { products, inputSelect } = this.state;
     return (
       <div>
         <div>
@@ -43,7 +44,10 @@ export default class Home extends React.Component {
           </button>
         </div>
         <div>
-          <CategoriesList />
+          <CategoriesList
+            inputSelect={ inputSelect }
+            onInputChange={ this.onInputChange }
+          />
         </div>
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.

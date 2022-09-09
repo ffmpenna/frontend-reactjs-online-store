@@ -8,23 +8,31 @@ export default class CategoriesList extends React.Component {
 
   async componentDidMount() {
     const response = await getCategories();
-    const names = response.map((item) => item.name);
-    this.setState({ categories: names });
+    const result = response.map((item) => item);
+    // console.log(result);
+    this.setState({ categories: result });
   }
 
   //   listCategories = async () => {};
 
   render() {
     const { categories } = this.state;
+    const { onInputChange } = this.props;
     return (
       <div>
         {categories.map((category) => (
-          <label key={ category } data-testid="category" htmlFor={ category }>
-            {category}
-            <input type="radio" name={ category } />
+          <label key={ category.id } data-testid="category" htmlFor={ category.name }>
+            {category.name}
+            <input
+              type="radio"
+              value={ category.id }
+              onChange={ onInputChange }
+              name="inputSelect"
+            />
           </label>
         ))}
       </div>
+
     );
   }
 }
