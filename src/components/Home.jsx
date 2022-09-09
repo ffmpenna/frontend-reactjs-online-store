@@ -7,24 +7,34 @@ export default class Home extends React.Component {
   state = {
     querryInput: '',
     products: undefined,
+    categorySelected: '',
+  };
+
+  searchProductByQuerry = async () => {
+    const { querryInput, categorySelected } = this.state;
+    const response = await getProductsFromCategoryAndQuery(
+      categorySelected,
+      querryInput,
+    );
+    this.setState({ products: response.results });
   };
 
   onInputChange = ({ target }) => {
-    const { name, type } = target;
-    const value = type === 'checkbox' ? target.checked : target.value;
+    const { name, value } = target;
     this.setState({
       [name]: value,
     });
   };
 
-  searchProductByQuerry = async () => {
-    const { querryInput } = this.state;
-    const response = await getProductsFromCategoryAndQuery('', querryInput);
-    this.setState({ products: response.results });
+  onCategoryChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    }, this.searchProductByQuerry);
   };
 
   render() {
-    const { products } = this.state;
+    const { products, categorySelected } = this.state;
     return (
       <div>
         <div>
@@ -43,7 +53,10 @@ export default class Home extends React.Component {
           </button>
         </div>
         <div>
-          <CategoriesList />
+          <CategoriesList
+            categorySelected={ categorySelected }
+            onInputChange={ this.onCategoryChange }
+          />
         </div>
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
@@ -56,7 +69,7 @@ export default class Home extends React.Component {
               title={ title }
               thumbnail={ thumbnail }
               price={ price }
-              productId={ id }
+              product-id={ id }
               key={ id }
             />
           ))

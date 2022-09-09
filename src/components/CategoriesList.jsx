@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getCategories } from '../services/api';
 
 export default class CategoriesList extends React.Component {
@@ -8,23 +9,36 @@ export default class CategoriesList extends React.Component {
 
   async componentDidMount() {
     const response = await getCategories();
-    const names = response.map((item) => item.name);
-    this.setState({ categories: names });
+    const result = response.map((item) => item);
+    this.setState({ categories: result });
   }
-
-  //   listCategories = async () => {};
 
   render() {
     const { categories } = this.state;
+    const { onInputChange } = this.props;
     return (
       <div>
         {categories.map((category) => (
-          <label key={ category } data-testid="category" htmlFor={ category }>
-            {category}
-            <input type="radio" name={ category } />
+          <label
+            key={ category.id }
+            data-testid="category"
+            htmlFor={ category.name }
+          >
+            <input
+              type="radio"
+              value={ category.id }
+              onChange={ onInputChange }
+              name="categorySelected"
+              id={ category.name }
+            />
+            {category.name}
           </label>
         ))}
       </div>
     );
   }
 }
+
+CategoriesList.propTypes = {
+  onInputChange: PropTypes.func,
+}.isRequired;
