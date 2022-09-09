@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
+import CartIcon from '../components/CartIcon';
 
 class Cart extends React.Component {
   state = {
@@ -12,7 +13,11 @@ class Cart extends React.Component {
   }
 
   getDetalhes = async () => {
-    const { match: { params: { id } } } = this.props;
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
     const received = await getProductById(id);
     this.setState({ detalhes: received });
   };
@@ -20,14 +25,17 @@ class Cart extends React.Component {
   render() {
     const { detalhes } = this.state;
     return (
-      <div data-testid="product">
-        <p data-testid="product-detail-name">{ detalhes.title }</p>
-        <img
-          data-testid="product-detail-image"
-          src={ detalhes.thumbnail }
-          alt={ detalhes.title }
-        />
-        <p data-testid="product-detail-price">{ detalhes.price }</p>
+      <div>
+        <CartIcon />
+        <div data-testid="product">
+          <p data-testid="product-detail-name">{detalhes.title}</p>
+          <img
+            data-testid="product-detail-image"
+            src={ detalhes.thumbnail }
+            alt={ detalhes.title }
+          />
+          <p data-testid="product-detail-price">{detalhes.price}</p>
+        </div>
       </div>
     );
   }
