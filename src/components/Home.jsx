@@ -7,25 +7,34 @@ export default class Home extends React.Component {
   state = {
     querryInput: '',
     products: undefined,
-    inputSelect: '',
+    categorySelected: '',
   };
 
   searchProductByQuerry = async () => {
-    const { querryInput, inputSelect } = this.state;
-    const response = await getProductsFromCategoryAndQuery(inputSelect, querryInput);
+    const { querryInput, categorySelected } = this.state;
+    const response = await getProductsFromCategoryAndQuery(
+      categorySelected,
+      querryInput,
+    );
     this.setState({ products: response.results });
   };
 
   onInputChange = ({ target }) => {
-    const { name, type } = target;
-    const value = type === 'checkbox' ? target.checked : target.value;
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  onCategoryChange = ({ target }) => {
+    const { name, value } = target;
     this.setState({
       [name]: value,
     }, this.searchProductByQuerry);
   };
 
   render() {
-    const { products, inputSelect } = this.state;
+    const { products, categorySelected } = this.state;
     return (
       <div>
         <div>
@@ -45,8 +54,8 @@ export default class Home extends React.Component {
         </div>
         <div>
           <CategoriesList
-            inputSelect={ inputSelect }
-            onInputChange={ this.onInputChange }
+            categorySelected={ categorySelected }
+            onInputChange={ this.onCategoryChange }
           />
         </div>
         <p data-testid="home-initial-message">
@@ -60,7 +69,7 @@ export default class Home extends React.Component {
               title={ title }
               thumbnail={ thumbnail }
               price={ price }
-              productId={ id }
+              product-id={ id }
               key={ id }
             />
           ))
