@@ -22,6 +22,15 @@ class Cart extends React.Component {
     this.setState({ detalhes: received });
   };
 
+  addToCart = (product) => {
+    const addedProducts = JSON.parse(localStorage.getItem('Produtos'));
+    console.log(addedProducts);
+    if (!addedProducts) {
+      return localStorage.setItem('Produtos', JSON.stringify([product]));
+    }
+    localStorage.setItem('Produtos', JSON.stringify([...addedProducts, product]));
+  };
+
   render() {
     const { detalhes } = this.state;
     return (
@@ -36,6 +45,14 @@ class Cart extends React.Component {
           />
           <p data-testid="product-detail-price">{detalhes.price}</p>
         </div>
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ () => this.addToCart(detalhes) }
+        >
+          Adicionar ao carrinho
+
+        </button>
       </div>
     );
   }
