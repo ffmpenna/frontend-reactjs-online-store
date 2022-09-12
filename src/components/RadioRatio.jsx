@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class RadioRatio extends Component {
   render() {
-    // const { index, onInputChange, rating } = this.props;
+    const { ratingValue, valueRadio } = this.props;
     return (
-      <label htmlFor="radio">
+      <label htmlFor={ `${ratingValue}-rating` }>
         <input
-          data-testid="1-rating"
-          id="radio1"
+          data-testid={ `${ratingValue}-rating` }
+          id={ `${ratingValue}-rating` }
           type="radio"
           name="rating"
-          // value={ rating }
-          // onClick={ onInputChange }
+          value={ ratingValue }
+          onClick={ () => valueRadio(ratingValue) }
         />
-        {index}
+        { ratingValue }
       </label>
     );
   }
 }
+RadioRatio.propTypes = {
+  onInputChange: PropTypes.func,
+  ratingValue: PropTypes.number,
+}.isRequired;
