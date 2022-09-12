@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
 import CartIcon from '../components/CartIcon';
+import Form from '../components/Form';
+// import UserReviews from '../components/UserReviews';
 
 class Cart extends React.Component {
   state = {
     detalhes: '',
+
   };
 
   async componentDidMount() {
@@ -32,7 +35,13 @@ class Cart extends React.Component {
   };
 
   render() {
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
     const { detalhes } = this.state;
+
     return (
       <div>
         <CartIcon />
@@ -45,6 +54,7 @@ class Cart extends React.Component {
           />
           <p data-testid="product-detail-price">{detalhes.price}</p>
         </div>
+        {/* <UserReviews id={ id } /> */}
         <button
           type="button"
           data-testid="product-detail-add-to-cart"
@@ -53,6 +63,7 @@ class Cart extends React.Component {
           Adicionar ao carrinho
 
         </button>
+        <Form id={ id } />
       </div>
     );
   }
