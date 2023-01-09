@@ -1,5 +1,6 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { Form } from 'react-bootstrap';
 import { getCategories } from '../services/api';
 
 export default class CategoriesList extends React.Component {
@@ -17,24 +18,23 @@ export default class CategoriesList extends React.Component {
     const { categories } = this.state;
     const { onInputChange } = this.props;
     return (
-      <div>
+
+      <Form.Select onChange={ onInputChange } className="me-2">
+        <option>
+          Escolha uma categoria...
+        </option>
+
         {categories.map((category) => (
-          <label
+          <option
             key={ category.id }
             data-testid="category"
-            htmlFor={ category.name }
+            value={ category.id }
           >
-            <input
-              type="radio"
-              value={ category.id }
-              onChange={ onInputChange }
-              name="categorySelected"
-              id={ category.name }
-            />
             {category.name}
-          </label>
+          </option>
         ))}
-      </div>
+      </Form.Select>
+
     );
   }
 }

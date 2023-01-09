@@ -1,8 +1,9 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import CartDetails from './pages/CartDetails';
 import Home from './pages/Home';
 import ShoppingCart from './pages/ShoppingCart';
-import CartDetails from './pages/CartDetails';
 // import './App.css';
 
 function App() {

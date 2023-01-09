@@ -1,9 +1,10 @@
 import React from 'react';
+import { Container, Navbar, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { getProductsFromCategoryAndQuery } from '../services/api';
+import CartIcon from '../components/CartIcon';
 import CategoriesList from '../components/CategoriesList';
 import ProductCard from '../components/ProductCard';
-import CartIcon from '../components/CartIcon';
+import { getProductsFromCategoryAndQuery } from '../services/api';
 
 export default class Home extends React.Component {
   state = {
@@ -29,10 +30,10 @@ export default class Home extends React.Component {
   };
 
   onCategoryChange = ({ target }) => {
-    const { name, value } = target;
+    const { value } = target;
     this.setState(
       {
-        [name]: value,
+        categorySelected: value,
       },
       this.searchProductByQuerry,
     );
@@ -51,28 +52,37 @@ export default class Home extends React.Component {
     const { products, categorySelected } = this.state;
     return (
       <div>
-        <CartIcon />
-        <div>
-          <input
-            name="querryInput"
-            onChange={ this.onInputChange }
-            type="text"
-            data-testid="query-input"
-          />
-          <button
-            type="button"
-            onClick={ this.searchProductByQuerry }
-            data-testid="query-button"
-          >
-            Pesquisar
-          </button>
-        </div>
-        <div>
-          <CategoriesList
-            categorySelected={ categorySelected }
-            onInputChange={ this.onCategoryChange }
-          />
-        </div>
+        <Navbar bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand>TrybeShop</Navbar.Brand>
+            <Form className="d-flex">
+              <Form.Control
+                name="querryInput"
+                onChange={ this.onInputChange }
+                type="search"
+                placeholder="O que você procura?"
+                data-testid="query-input"
+                className="me-2"
+              />
+              <CategoriesList
+                categorySelected={ categorySelected }
+                onInputChange={ this.onCategoryChange }
+              />
+              <Button
+                type="button"
+                onClick={ this.searchProductByQuerry }
+                data-testid="query-button"
+                variant="outline-success"
+              >
+                Pesquisar
+              </Button>
+            </Form>
+            <Navbar.Text>
+              <CartIcon />
+            </Navbar.Text>
+          </Container>
+        </Navbar>
+        <div />
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
