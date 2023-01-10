@@ -1,19 +1,30 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { Card } from 'react-bootstrap';
+import AddToCartButton from './AddToCartButton';
 
 export default class ProductCard extends React.Component {
   render() {
-    const { thumbnail, title, price, productId } = this.props;
+    const { thumbnail, title, price, productId, addToCart, product } = this.props;
     return (
-
-      <div
+      <Card
+        style={ { width: '14rem' } }
         product-id={ productId }
         data-testid="product"
       >
-        <p>{title}</p>
-        <img src={ thumbnail } alt={ title } />
-        <p>{price}</p>
-      </div>
+        <a href={ `/productdetails/${productId}` }>
+          <Card.Img variant="top" src={ thumbnail } alt={ title } />
+        </a>
+        <Card.Body>
+          <a href={ `/productdetails/${productId}` }>
+            <Card.Title title={ title } className="fs-6 text-truncate">
+              {title}
+            </Card.Title>
+          </a>
+          <Card.Text>{`R$${price}`}</Card.Text>
+          <AddToCartButton addToCart={ addToCart } product={ product } />
+        </Card.Body>
+      </Card>
 
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Stack } from 'react-bootstrap';
 import { BsCart4 } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
@@ -16,18 +16,15 @@ export default class CartIcon extends Component {
   render() {
     const { quantity } = this.state;
     return (
-      <Container>
-        <Row>
-          <Col>
-            <Link data-testid="shopping-cart-button" to="/shoppingcart">
-              <BsCart4 className="fs-2" />
-            </Link>
-          </Col>
-          <Col>
-            <span data-testid="shopping-cart-product-quantity">{quantity}</span>
-          </Col>
-        </Row>
-      </Container>
+      <Stack direction="horizontal" gap={ 3 }>
+
+        <Link data-testid="shopping-cart-button" to="/shoppingcart">
+          <BsCart4 className="fs-2" />
+        </Link>
+
+        <span data-testid="shopping-cart-product-quantity">{quantity}</span>
+      </Stack>
+
     );
   }
 }

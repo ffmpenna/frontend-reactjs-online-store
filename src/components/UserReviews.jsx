@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { Container, Stack } from 'react-bootstrap';
+import { BsStarFill } from 'react-icons/bs';
 
 export default class UserReviews extends Component {
   render() {
@@ -9,14 +11,41 @@ export default class UserReviews extends Component {
       <div>
         {
           !cartComment.length ? <p>Nenhum comentario</p>
-            : cartComment.map((info, index) => (
-              (
-                <div key={ `${info.id}${index} ` }>
+            : <Container className="comment-area">
+              <h5>Avaliações</h5>
+              {cartComment.map((info, index) => (
+                (
+                  <div className="comment mb-3" key={ `${info.id}${index} ` }>
+                    <div>
+                      <p
+                        className="fs-4"
+                        data-testid="review-card-email"
+                      >
+                        {`Usuário: ${info.email}`}
+                      </p>
+                    </div>
+                    <Container>
 
-                  <p data-testid="review-card-email">{info.email}</p>
-                  <p data-testid="review-card-rating">{info.text}</p>
-                  <p data-testid="review-card-evaluation">{info.rating}</p>
-                </div>)))
+                      <p
+                        className="text-break"
+                        data-testid="review-card-rating"
+                      >
+                        {info.text}
+                      </p>
+                      <Stack
+                        gap={ 2 }
+                        direction="horizontal"
+                        className="d-flex align-items-center"
+                      >
+                        <BsStarFill />
+                        <span data-testid="review-card-evaluation">
+                          {info.rating}
+                        </span>
+                      </Stack>
+
+                    </Container>
+                  </div>)))}
+              </Container>
 
         }
       </div>

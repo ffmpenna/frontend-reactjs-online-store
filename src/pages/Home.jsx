@@ -1,8 +1,7 @@
 import React from 'react';
-import { Container, Navbar, Form, Button } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import CartIcon from '../components/CartIcon';
-import CategoriesList from '../components/CategoriesList';
+import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 
@@ -13,13 +12,18 @@ export default class Home extends React.Component {
     categorySelected: '',
   };
 
+  async componentDidMount() {
+    const response = await getProductsFromCategoryAndQuery();
+    this.setState({ products: response });
+  }
+
   searchProductByQuerry = async () => {
     const { querryInput, categorySelected } = this.state;
     const response = await getProductsFromCategoryAndQuery(
       categorySelected,
       querryInput,
     );
-    this.setState({ products: response.results });
+    this.setState({ products: response });
   };
 
   onInputChange = ({ target }) => {
@@ -52,68 +56,35 @@ export default class Home extends React.Component {
     const { products, categorySelected } = this.state;
     return (
       <div>
-        <Navbar bg="dark" variant="dark">
-          <Container>
-            <Navbar.Brand>TrybeShop</Navbar.Brand>
-            <Form className="d-flex">
-              <Form.Control
-                name="querryInput"
-                onChange={ this.onInputChange }
-                type="search"
-                placeholder="O que você procura?"
-                data-testid="query-input"
-                className="me-2"
-              />
-              <CategoriesList
-                categorySelected={ categorySelected }
-                onInputChange={ this.onCategoryChange }
-              />
-              <Button
-                type="button"
-                onClick={ this.searchProductByQuerry }
-                data-testid="query-button"
-                variant="outline-success"
-              >
-                Pesquisar
-              </Button>
-            </Form>
-            <Navbar.Text>
-              <CartIcon />
-            </Navbar.Text>
-          </Container>
-        </Navbar>
+        <Header
+          onCategoryChange={ this.onCategoryChange }
+          searchProductByQuerry={ this.searchProductByQuerry }
+          categorySelected={ categorySelected }
+          onInputChange={ this.onInputChange }
+          showSearch
+        />
         <div />
-        <p data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </p>
         {products === undefined ? (
           <p>Nenhum produto foi encontrado</p>
         ) : (
-          products.map((product) => (
-            <div key={ `div${product.id}` }>
-              <Link
-                key={ product.id }
-                to={ `/productdetails/${product.id}` }
-                data-testid="product-detail-link"
-              >
-                <ProductCard
-                  title={ product.title }
-                  thumbnail={ product.thumbnail }
-                  price={ product.price }
-                  productId={ product.id }
-                  key={ product.id }
-                />
-              </Link>
-              <button
-                key={ `button${product.id}` }
-                type="button"
-                data-testid="product-add-to-cart"
-                onClick={ () => this.addToCart(product) }
-              >
-                Adicionar ao Carrinho
-              </button>
-            </div>
-          ))
+          <Container className="d-flex p-3">
+
+            <Row xs={ 1 } md={ 2 } className="g-4">
+              {
+                products.results.map((product) => (
+                  <ProductCard
+                    title={ product.title }
+                    thumbnail={ product.thumbnail }
+                    price={ product.price }
+                    productId={ product.id }
+                    key={ product.id }
+                    addToCart={ this.addToCart }
+                    product={ product }
+                  />
+                ))
+              }
+            </Row>
+          </Container>
         )}
       </div>
     );

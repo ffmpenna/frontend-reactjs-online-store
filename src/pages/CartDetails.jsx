@@ -1,8 +1,11 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { getProductById } from '../services/api';
+import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
+import AddToCartButton from '../components/AddToCartButton';
 import CartIcon from '../components/CartIcon';
-import Form from '../components/Form';
+import Header from '../components/Header';
+import RatingForm from '../components/RatingForm';
+import { getProductById } from '../services/api';
 // import UserReviews from '../components/UserReviews';
 
 class Cart extends React.Component {
@@ -44,26 +47,34 @@ class Cart extends React.Component {
 
     return (
       <div>
-        <CartIcon />
-        <div data-testid="product">
-          <p data-testid="product-detail-name">{detalhes.title}</p>
-          <img
-            data-testid="product-detail-image"
-            src={ detalhes.thumbnail }
-            alt={ detalhes.title }
-          />
-          <p data-testid="product-detail-price">{detalhes.price}</p>
-        </div>
-        {/* <UserReviews id={ id } /> */}
-        <button
-          type="button"
-          data-testid="product-detail-add-to-cart"
-          onClick={ () => this.addToCart(detalhes) }
-        >
-          Adicionar ao carrinho
+        <Header />
+        <Container className="product-detailed-container" md={ 2 }>
 
-        </button>
-        <Form id={ id } />
+          <Row>
+            <Col>
+              <div className="product-detailed" data-testid="product">
+                <img
+                  data-testid="product-detail-image"
+                  src={ detalhes.thumbnail }
+                  alt={ detalhes.title }
+                  width="400px"
+                />
+              </div>
+            </Col>
+            <Col>
+              <h4 data-testid="product-detail-name">{detalhes.title}</h4>
+              <p
+                className="fs-2"
+                data-testid="product-detail-price"
+              >
+                {`R$${detalhes.price}`}
+              </p>
+              <AddToCartButton product={ detalhes } addToCart={ this.addToCart } />
+            </Col>
+          </Row>
+          <RatingForm id={ id } />
+        </Container>
+
       </div>
     );
   }
